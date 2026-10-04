@@ -122,7 +122,7 @@ def _traer_texto(it: dict) -> str:
         (
             titulo, th, publicado, pagina.texto[:200000] if pagina.ok else None,
             pagina.metodo if pagina.ok else None,
-            None if pagina.ok else (pagina.error or "; ".join(pagina.intentos))[:300], estado, it["id"],
+            None if pagina.ok else f"{pagina.error or 'sin texto'} [{', '.join(pagina.intentos)}]"[:300], estado, it["id"],
         ),
     )
     return estado
@@ -143,6 +143,22 @@ def pasada() -> dict:
     log.info("Recolección: %d nuevos; %d fuentes fallan de %d", nuevos, len(fallidas), len(lista))
 
     duplicados = _marcar_duplicados()
+
+    # Segunda oportunidad: si a una fuente se le ha activado el navegador en el registro, los artículos
+    # recientes que fallaron solo por HTTP se reintentan una vez con él.
+    reintentos = db.ex(
+        """
+        UPDATE items i SET estado = 'nuevo', texto_error = NULL
+        FROM fuentes f
+        WHERE f.id = i.fuente_id AND i.estado = 'sin_texto'
+          AND i.recolectado > now() - interval '2 days'
+          AND (f.config ->> 'navegador' = 'true' OR f.config ->> 'sigilo' = 'true')
+          AND coalesce(i.texto_error, '') NOT LIKE '%%navegador%%'
+          AND coalesce(i.texto_error, '') <> 'solo_feed'
+        """
+    )
+    if reintentos:
+        log.info("Reintentos con navegador: %d items", reintentos)
 
     pendientes = db.q(
         """
