@@ -106,8 +106,13 @@ si el dossier refleja bien la realidad.
 apagan fuentes. Cada una lleva dominio, región, tipo y fiabilidad en escala Admiralty
 (A oficial, B establecida, C desigual). La salud de cada fuente se ve en la página «Fuentes».
 
-Estado tras las primeras pasadas: 94 fuentes en el registro, 82 activas, 81 respondiendo. Las
-doce apagadas conservan su motivo en el registro:
+Estado tras las primeras pasadas: 94 fuentes en el registro y 82 activas, de las que 80
+respondieron en la última pasada. Ledger Insights devuelve 403 de forma intermitente y No-Ficción
+limita por frecuencia (429); siguen activas y en observación. El archivo arrancó con unos 1.160
+items: 697 con texto traído por HTTP, 243 con el texto del propio feed, 30 con Chromium, 2 desde
+PDF y 187 solo con titular y resumen (fuentes de pago o sin texto extraíble).
+
+Las doce apagadas conservan su motivo en el registro:
 
 | Fuente | Motivo |
 |---|---|
