@@ -134,10 +134,47 @@ def _probar_navegador() -> None:
         log.error("Navegador: Chromium NO operativo; solo funcionará el nivel HTTP. %s", str(e)[:300])
 
 
+def _probar_panel() -> None:
+    """Al arrancar, pinta todas las páginas del panel con los datos reales y deja el resultado en el registro.
+
+    El panel vive en otro servicio y tras contraseña; esta comprobación usa el mismo código y la misma
+    base, así que un fallo de plantilla con datos de producción aparece aquí en cada despliegue.
+    """
+    try:
+        import base64
+        import secrets
+
+        from fastapi.testclient import TestClient
+
+        from .web.app import app
+
+        clave = secrets.token_urlsafe(16)
+        config.PANEL_PASSWORD = clave  # solo en este proceso, que no sirve el panel
+        cabeceras = {"Authorization": "Basic " + base64.b64encode(f"motor:{clave}".encode()).decode()}
+        rutas = ["/", "/radar", "/radar?estado=sin_puntuar&orden=reciente", "/radar?estado=todos&q=banco",
+                 "/candidatos", "/dossieres", "/piezas", "/fuentes", "/trabajos"]
+        d = db.q1("SELECT id FROM dossieres ORDER BY id DESC LIMIT 1")
+        p = db.q1("SELECT id FROM piezas ORDER BY id DESC LIMIT 1")
+        rutas += ([f"/dossier/{d['id']}"] if d else []) + ([f"/pieza/{p['id']}"] if p else [])
+        cliente = TestClient(app)
+        fallos = []
+        for ruta in rutas:
+            r = cliente.get(ruta, headers=cabeceras)
+            if r.status_code != 200:
+                fallos.append(f"{ruta} -> {r.status_code}: {r.text[:200]}")
+        if fallos:
+            log.error("Panel: %d de %d páginas fallan con datos reales: %s", len(fallos), len(rutas), " | ".join(fallos))
+        else:
+            log.info("Panel: %d de %d páginas correctas con datos reales", len(rutas), len(rutas))
+    except Exception as e:  # noqa: BLE001
+        log.error("Panel: no se pudo ejecutar la autoprueba: %s", str(e)[:300])
+
+
 def motor() -> None:
     db.migrar()
     _recuperar_interrumpidos()
     threading.Thread(target=_probar_navegador, daemon=True).start()
+    threading.Thread(target=_probar_panel, daemon=True).start()
     if config.RADAR_AL_ARRANCAR and not hay_activo("radar"):
         encolar("radar", origen="arranque")
         log.info("Radar encolado por RADAR_AL_ARRANCAR")

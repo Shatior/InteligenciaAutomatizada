@@ -31,7 +31,7 @@ def recolectar(fuente: dict) -> list[dict]:
     # Un mismo artículo suele enlazarse dos veces (imagen y titular): se conserva el título más largo.
     titulos: dict[str, tuple[str, str]] = {}
     for href, interior in _ENLACE.findall(html):
-        url = urljoin(fuente["url"], href.strip())
+        url = urljoin(fuente["url"], re.sub(r"(%20|\s)+$", "", href.strip()))
         partes = urlsplit(url)
         if not partes.scheme.startswith("http"):
             continue

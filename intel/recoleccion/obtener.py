@@ -24,7 +24,7 @@ def _silenciar_scrapling() -> None:
     """Scrapling instala su propio registro a nivel INFO al importarse: una línea por petición."""
     import importlib
 
-    importlib.import_module("scrapling")
+    importlib.import_module("scrapling.fetchers")  # es este módulo el que fija el nivel INFO
     registro = logging.getLogger("scrapling")
     registro.setLevel(logging.WARNING)
     registro.propagate = False

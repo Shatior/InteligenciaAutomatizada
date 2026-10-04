@@ -46,7 +46,7 @@ HILOS = _int("HILOS", 8)
 
 # Niveles de navegador de Scrapling. El nivel sigiloso solo se usa en fuentes marcadas sigilo: true.
 NAVEGADOR = _env("NAVEGADOR", "1") == "1"
-MAX_NAVEGADOR_POR_PASADA = _int("MAX_NAVEGADOR_POR_PASADA", 30)
+MAX_NAVEGADOR_POR_PASADA = _int("MAX_NAVEGADOR_POR_PASADA", 60)
 
 # Dossier
 DOSSIER_MAX_FUENTES = _int("DOSSIER_MAX_FUENTES", 20)

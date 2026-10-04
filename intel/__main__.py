@@ -13,7 +13,7 @@ import sys
 
 def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s", stream=sys.stdout)
-    for ruidoso in ("httpx", "httpcore", "trafilatura", "scrapling", "anthropic", "htmldate", "courlan"):
+    for ruidoso in ("httpx", "httpx2", "httpcore", "trafilatura", "scrapling", "anthropic", "htmldate", "courlan"):
         logging.getLogger(ruidoso).setLevel(logging.WARNING)
 
     orden = sys.argv[1] if len(sys.argv) > 1 else "panel"
