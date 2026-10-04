@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block titulo %}Pieza {{ p.id }} · Inteligencia{% endblock %}
+{% block cabecera %}{% if esperando %}<meta http-equiv="refresh" content="8">{% endif %}{% endblock %}
+{% block contenido %}
+<p class="meta"><a href="/dossier/{{ p.dossier_id }}">← Dossier {{ p.dossier_id }}</a><span class="etq">{{ ediciones.get(p.edicion, {}).get('nombre', p.edicion) }}</span>
+<span class="etq {{ 'bien' if p.estado == 'aprobada' else 'mal' if p.estado == 'error' else 'gris' }}">{{ p.estado }}</span></p>
+{% if esperando %}
+<h1>Redactando…</h1>
+<div class="aviso">El borrador y su verificación tardan uno o dos minutos; esta página se actualiza sola.</div>
+<p class="tenue"><strong>Tesis:</strong> {{ p.tesis }}</p>
+{% elif p.estado == 'error' %}
+<h1>La redacción falló</h1><div class="error">{{ p.error }}</div>
+{% else %}
+<div class="dos">
+  <div>
+    <div class="tarjeta pieza">
+      <div class="etq">{{ p.etiqueta }}</div>
+      <h1>{{ p.titulo }}</h1>
+      <p class="entradilla">{{ p.entradilla }}</p>
+      {{ p.cuerpo | md }}
+    </div>
+    <details><summary>Editar</summary>
+    <div class="tarjeta">
+      <form method="post" action="/pieza/{{ p.id }}/guardar">
+        <label for="etiqueta">Etiqueta</label><input id="etiqueta" type="text" name="etiqueta" value="{{ p.etiqueta or '' }}">
+        <label for="titulo">Titular</label><input id="titulo" type="text" name="titulo" value="{{ p.titulo or '' }}" style="width:100%">
+        <label for="entradilla">Entradilla</label><textarea id="entradilla" name="entradilla" rows="3">{{ p.entradilla or '' }}</textarea>
+        <label for="cuerpo">Cuerpo</label><textarea id="cuerpo" class="cuerpo" name="cuerpo">{{ p.cuerpo or '' }}</textarea>
+        <p class="linea" style="margin-top:12px">
+          <button name="accion" value="guardar">Guardar</button>
+          <button class="sec" name="accion" value="reverificar">Guardar y volver a verificar</button>
+          <button class="sec" name="accion" value="aprobar">Guardar y aprobar</button>
+        </p>
+      </form>
+    </div></details>
+  </div>
+  <div>
+    <div class="tarjeta">
+      <p class="peq tenue" style="margin:0"><strong>Tesis</strong></p><p>{{ p.tesis }}</p>
+      <p class="meta"><span>{{ v.palabras }} palabras</span><span>{{ v.cifras }} cifras</span></p>
+      <p style="margin:10px 0 0"><a class="boton sec" href="/pieza/{{ p.id }}/descargar">Descargar Markdown</a></p>
+    </div>
+    <h2>Verificación</h2>
+    {% set graves = v.auditoria | selectattr('gravedad', 'equalto', 'alta') | list %}
+    {% if not v.cifras_sin_respaldo and not v.auditoria and not v.avisos and not v.datos_no_verificados %}
+    <div class="ok">Sin incidencias: todas las cifras están en el dossier y la auditoría no encontró afirmaciones sin respaldo.</div>
+    {% endif %}
+    {% if v.avisos %}<div class="tarjeta"><h3>Formato</h3><ul class="limpia">{% for a in v.avisos %}<li>{{ a }}</li>{% endfor %}</ul></div>{% endif %}
+    {% if v.cifras_sin_respaldo %}<div class="tarjeta"><h3>Cifras que no están en el dossier</h3>
+      <ul class="limpia">{% for c in v.cifras_sin_respaldo %}<li><span class="etq mal">{{ c.cifra }}</span> <span class="peq">{{ c.contexto }}</span></li>{% endfor %}</ul></div>{% endif %}
+    {% if v.datos_no_verificados %}<div class="tarjeta"><h3>Datos usados sin verificar</h3>
+      <ul class="limpia">{% for c in v.datos_no_verificados %}<li><strong>[{{ c.id }}]</strong> {{ c.dato }}</li>{% endfor %}</ul></div>{% endif %}
+    {% if v.auditoria %}<div class="tarjeta"><h3>Auditoría{% if graves %} · {{ graves | length }} graves{% endif %}</h3>
+      <ul class="limpia">{% for a in v.auditoria %}<li><span class="etq {{ 'mal' if a.gravedad == 'alta' else 'gris' }}">{{ a.gravedad }}</span> {{ a.problema }}{% if a.afirmacion %}<blockquote>«{{ a.afirmacion }}»</blockquote>{% endif %}</li>{% endfor %}</ul></div>{% endif %}
+    <p class="tenue peq">La verificación coteja cifras y afirmaciones contra el dossier. No sustituye tu lectura: comprueba que el dossier refleja bien las fuentes y que la tesis es la tuya.</p>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

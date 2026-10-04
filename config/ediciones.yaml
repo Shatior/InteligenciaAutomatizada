@@ -1,0 +1,73 @@
+# Productos editoriales. Todos comparten radar, archivo y plantilla de pieza;
+# cambian el filtro de dominio, la nota por la que se ordena y el criterio editorial.
+
+ediciones:
+  global:
+    nombre: Geopolítica — edición global
+    dominios: [geopolitica, macro]
+    orden: global          # ordena por puntuacion_global
+    umbral: 6.0
+    candidatos: 9
+    piezas: 3
+    publico: >
+      Directivos y analistas hispanohablantes que quieren entender los grandes movimientos
+      de la semana en el mundo.
+    criterio: >
+      Magnitud y novedad mundial. Tres piezas de tres regiones distintas. Se prefieren los
+      hechos con cifras abundantes y con una tesis que diga algo sobre cómo funciona el poder.
+    cierre: >
+      La pieza termina con la tesis. No lleva párrafo de implicaciones regionales.
+
+  regional:
+    nombre: Geopolítica — Centroamérica y Latinoamérica
+    dominios: [geopolitica, macro]
+    orden: regional        # ordena por puntuacion_regional
+    umbral: 6.0
+    candidatos: 9
+    piezas: 3
+    publico: >
+      Directivos de instituciones financieras, reguladores y empresas de Centroamérica. El foco
+      es Centroamérica; el resto de Latinoamérica entra como contexto cuando la afecta.
+    criterio: >
+      Efecto sobre la región, ocurra donde ocurra el hecho. Dos piezas sobre hechos de la región
+      y una que relee un tema global desde ella. Un tema que también aparezca en la edición
+      global solo se propone si la tesis es distinta.
+    cierre: >
+      Antes del cierre, un párrafo de implicaciones para Centroamérica: remesas, comercio,
+      riesgo soberano, banca o regulación, según corresponda, con datos del dossier. El último
+      párrafo enuncia la tesis leída desde la región.
+
+  ciber:
+    nombre: Ciberriesgo estratégico
+    dominios: [ciber]
+    orden: regional
+    umbral: 5.5
+    candidatos: 7
+    piezas: 2
+    publico: >
+      Comités de riesgos, juntas directivas y responsables de cumplimiento de entidades
+      financieras. No es un público técnico.
+    criterio: >
+      Ciberriesgo como riesgo de negocio: quién ataca a qué sector, cuánto cuesta, qué exige el
+      regulador, qué falla en los terceros, qué cambia en seguros y en gobierno de IA. Se
+      descartan avisos técnicos, vulnerabilidades sueltas y novedades de producto.
+    cierre: >
+      Antes del cierre, un párrafo sobre qué significa para una entidad financiera regulada de
+      Centroamérica. El último párrafo enuncia la tesis.
+
+  digital:
+    nombre: Transformación digital financiera
+    dominios: [transformacion]
+    orden: regional
+    umbral: 5.5
+    candidatos: 7
+    piezas: 2
+    publico: >
+      Directivos de banca, pensiones, seguros y fintech de Centroamérica y Latinoamérica.
+    criterio: >
+      Cambios que alteran el negocio financiero: neobancos, pagos instantáneos, tokenización,
+      stablecoins y CBDC, regulación fintech y open finance, automatización e IA en operaciones,
+      inversión y fusiones. Se descartan notas de prensa de producto y rondas sin relevancia.
+    cierre: >
+      Antes del cierre, un párrafo sobre qué implica para las entidades de la región. El último
+      párrafo enuncia la tesis.

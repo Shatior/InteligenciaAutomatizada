@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block titulo %}Candidatos · Inteligencia{% endblock %}
+{% block contenido %}
+<h1>Candidatos de la semana del {{ lunes | fecha }}</h1>
+<form class="linea" method="post" action="/candidatos/generar">
+  <a class="boton sec" href="/candidatos?semana={{ anterior }}">← Semana anterior</a>
+  <a class="boton sec" href="/candidatos?semana={{ siguiente }}">Semana siguiente →</a>
+  {% if generando %}<span class="etq">Generando…</span>{% else %}
+  <select name="edicion"><option value="">Todas las ediciones</option>{% for k, e in ediciones.items() %}<option value="{{ k }}">{{ e.nombre }}</option>{% endfor %}</select>
+  <button class="sec">Generar ahora</button>{% endif %}
+</form>
+
+{% for clave, ed in ediciones.items() %}
+<h2>{{ ed.nombre }} <span class="tenue peq">· objetivo: {{ ed.piezas }} piezas</span></h2>
+{% for c in por_edicion.get(clave, []) %}
+<div class="tarjeta">
+  <div class="meta"><span class="etq">{{ c.etiqueta }}</span><span class="nota">{{ "%.1f" | format(c.puntuacion or 0) }}</span>{% if c.estado == 'elegido' %}<span class="etq bien">elegido</span>{% endif %}</div>
+  <h3>{{ c.titulo }}</h3>
+  <p>{{ c.hecho }}</p>
+  <p class="tenue peq">{{ c.por_que }}</p>
+  <p class="peq"><strong>Tesis posibles</strong></p>
+  <ul class="limpia">{% for t in c.tesis %}<li>{{ t }}</li>{% endfor %}</ul>
+  <details><summary>{{ c.item_ids | length }} items del radar</summary>
+    <ul class="limpia">{% for i in c.item_ids %}{% if items.get(i) %}<li><a href="{{ items[i].url }}" target="_blank" rel="noopener noreferrer">{{ items[i].titulo }}</a> <span class="tenue">· {{ items[i].fuente }}</span></li>{% endif %}{% endfor %}</ul>
+  </details>
+  <form class="linea" method="post" action="/candidatos/{{ c.id }}/dossier" style="margin-top:12px">
+    {% if c.dossier_id %}<a class="boton" href="/dossier/{{ c.dossier_id }}">Ver dossier</a>{% else %}
+    <input type="text" name="enfoque" placeholder="Enfoque (opcional)" size="34">
+    <button>Montar dossier</button>{% endif %}
+    <button class="sec" formaction="/candidatos/{{ c.id }}/descartar">Descartar</button>
+  </form>
+</div>
+{% else %}<p class="tenue">Sin candidatos para esta edición en esta semana.</p>{% endfor %}
+{% endfor %}
+{% endblock %}

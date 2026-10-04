@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block titulo %}Dossieres · Inteligencia{% endblock %}
+{% block contenido %}
+<h1>Dossieres</h1>
+<div class="tarjeta">
+  <h3>Tema libre</h3>
+  <p class="tenue peq">Para un tema que no venga de los candidatos. El sistema busca fuentes, extrae hechos con su cita y propone tesis.</p>
+  <form method="post" action="/dossieres/nuevo">
+    <label for="tema">Tema</label>
+    <textarea id="tema" name="tema" rows="2" required minlength="10" placeholder="El hecho y lo que quieres analizar"></textarea>
+    <label for="enfoque">Enfoque (opcional)</label>
+    <input id="enfoque" type="text" name="enfoque" style="width:100%">
+    <label for="edicion">Edición</label>
+    <div class="linea"><select id="edicion" name="edicion">{% for k, e in ediciones.items() %}<option value="{{ k }}">{{ e.nombre }}</option>{% endfor %}</select>
+    <button>Montar dossier</button></div>
+  </form>
+</div>
+<div class="tarjeta tabla">
+  <table>
+    <tr><th>#</th><th>Tema</th><th>Edición</th><th>Estado</th><th class="num">Fuentes</th><th class="num">Hechos</th><th class="num">Piezas</th><th>Creado</th></tr>
+    {% for d in filas %}
+    <tr><td>{{ d.id }}</td><td><a href="/dossier/{{ d.id }}">{{ d.tema[:110] }}</a></td><td class="tenue">{{ d.edicion }}</td>
+      <td><span class="etq {{ 'bien' if d.estado == 'listo' else 'mal' if d.estado == 'error' else 'gris' }}">{{ d.estado }}</span></td>
+      <td class="num">{{ d.fuentes }}</td><td class="num">{{ d.hechos }}</td><td class="num">{{ d.piezas }}</td><td class="tenue">{{ d.creado | hora }}</td></tr>
+    {% else %}<tr><td colspan="8" class="tenue">Aún no hay dossieres.</td></tr>{% endfor %}
+  </table>
+</div>
+{% endblock %}

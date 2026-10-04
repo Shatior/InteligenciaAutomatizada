@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block titulo %}Fuentes · Inteligencia{% endblock %}
+{% block contenido %}
+<h1>Registro de fuentes</h1>
+<p class="tenue peq">El registro se edita en <code>config/fuentes.yaml</code> del repositorio; aquí se ve su salud. Fiabilidad en escala Admiralty: A oficial, B establecida, C desigual.</p>
+<div class="tarjeta tabla">
+  <table>
+    <tr><th>Fuente</th><th>Dominio</th><th>Región</th><th>Fiab.</th><th>Método</th><th>Estado</th><th class="num">Última</th><th class="num">Total</th><th>Último acierto</th></tr>
+    {% for f in filas %}
+    <tr>
+      <td><a href="{{ f.url }}" target="_blank" rel="noopener noreferrer">{{ f.nombre }}</a>{% if f.ultimo_error %}<br><span class="peq" style="color:var(--mal)">{{ f.ultimo_error[:160] }}</span>{% endif %}</td>
+      <td class="tenue">{{ f.dominio }}</td><td class="tenue">{{ f.region }}</td><td>{{ f.fiabilidad }}</td>
+      <td class="tenue">{{ f.metodo }}{% if f.config.get('sigilo') %} · sigilo{% elif f.config.get('navegador') %} · navegador{% endif %}{% if f.config.get('solo_feed') %} · solo feed{% endif %}</td>
+      <td>{% if not f.activa %}<span class="etq gris">inactiva</span>{% elif f.fallos_consecutivos %}<span class="etq mal">falla ×{{ f.fallos_consecutivos }}</span>{% elif f.ultimo_ok %}<span class="etq bien">sana</span>{% else %}<span class="etq gris">sin probar</span>{% endif %}</td>
+      <td class="num">{{ f.items_ultimo }}</td><td class="num">{{ f.items_total }}</td><td class="tenue">{{ f.ultimo_ok | hora }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

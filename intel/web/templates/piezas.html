@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block titulo %}Piezas · Inteligencia{% endblock %}
+{% block contenido %}
+<h1>Piezas</h1>
+<div class="tarjeta tabla">
+  <table>
+    <tr><th>#</th><th>Título</th><th>Edición</th><th>Estado</th><th class="num">Palabras</th><th>Actualizada</th></tr>
+    {% for p in filas %}
+    <tr><td>{{ p.id }}</td><td><a href="/pieza/{{ p.id }}">{{ p.titulo or p.tesis[:100] }}</a></td><td class="tenue">{{ p.edicion }}</td>
+      <td><span class="etq {{ 'bien' if p.estado == 'aprobada' else 'mal' if p.estado == 'error' else 'gris' }}">{{ p.estado }}</span></td>
+      <td class="num">{{ p.palabras or '—' }}</td><td class="tenue">{{ p.actualizado | hora }}</td></tr>
+    {% else %}<tr><td colspan="6" class="tenue">Aún no hay piezas.</td></tr>{% endfor %}
+  </table>
+</div>
+{% endblock %}

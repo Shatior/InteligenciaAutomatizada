@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{% block titulo %}Inteligencia{% endblock %}</title>
+  <link rel="stylesheet" href="/static/estilo.css">
+  {% block cabecera %}{% endblock %}
+</head>
+<body>
+<header class="barra">
+  <div class="dentro">
+    <a class="marca" href="/">Inteligencia</a>
+    <nav>
+      {% set ruta = request.url.path %}
+      <a href="/" class="{{ 'activo' if ruta == '/' }}">Resumen</a>
+      <a href="/radar" class="{{ 'activo' if ruta.startswith('/radar') }}">Radar</a>
+      <a href="/candidatos" class="{{ 'activo' if ruta.startswith('/candidatos') }}">Candidatos</a>
+      <a href="/dossieres" class="{{ 'activo' if ruta.startswith('/dossier') }}">Dossieres</a>
+      <a href="/piezas" class="{{ 'activo' if ruta.startswith('/pieza') }}">Piezas</a>
+      <a href="/fuentes" class="{{ 'activo' if ruta.startswith('/fuentes') }}">Fuentes</a>
+      <a href="/trabajos" class="{{ 'activo' if ruta.startswith('/trabajos') }}">Trabajos</a>
+    </nav>
+  </div>
+</header>
+<main>
+  {% if not claude %}
+  <div class="aviso">Falta <strong>ANTHROPIC_API_KEY</strong>: el radar recoge y archiva, pero no puntúa, no propone temas y no redacta.</div>
+  {% endif %}
+  {% if not exa %}
+  <div class="aviso">Falta <strong>EXA_API_KEY</strong>: los dossieres solo usan el archivo propio, sin búsqueda web.</div>
+  {% endif %}
+  {% block contenido %}{% endblock %}
+</main>
+</body>
+</html>

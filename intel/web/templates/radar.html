@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block titulo %}Radar · Inteligencia{% endblock %}
+{% block contenido %}
+<h1>Radar</h1>
+<form class="linea" method="get">
+  <input type="search" name="q" value="{{ q }}" placeholder="Buscar en el archivo" size="26">
+  <select name="dominio">
+    <option value="">Todos los dominios</option>
+    {% for d in ['geopolitica', 'macro', 'ciber', 'transformacion'] %}<option value="{{ d }}" {{ 'selected' if dominio == d }}>{{ d }}</option>{% endfor %}
+  </select>
+  <select name="orden">
+    <option value="global" {{ 'selected' if orden == 'global' }}>Nota global</option>
+    <option value="regional" {{ 'selected' if orden == 'regional' }}>Nota regional</option>
+    <option value="reciente" {{ 'selected' if orden == 'reciente' }}>Más recientes</option>
+  </select>
+  <select name="dias">
+    {% for n in [1, 3, 7, 14, 30, 90] %}<option value="{{ n }}" {{ 'selected' if dias == n }}>{{ n }} días</option>{% endfor %}
+  </select>
+  <select name="estado">
+    <option value="puntuado" {{ 'selected' if estado == 'puntuado' }}>Puntuados</option>
+    <option value="sin_puntuar" {{ 'selected' if estado == 'sin_puntuar' }}>Sin puntuar</option>
+    <option value="todos" {{ 'selected' if estado == 'todos' }}>Todos</option>
+  </select>
+  <button>Filtrar</button>
+</form>
+<p class="tenue peq">{{ items | length }} items{% if items | length == 150 %} (máximo mostrado){% endif %}</p>
+<div class="tarjeta">
+  {% for i in items %}
+  <div class="item">
+    <div class="titulo"><a href="{{ i.url }}" target="_blank" rel="noopener noreferrer">{{ i.titulo or i.url }}</a></div>
+    {% if i.resumen %}<div class="peq">{{ i.resumen }}</div>{% endif %}
+    <div class="meta">
+      {% if i.puntuacion_global is not none %}<span class="nota">G {{ "%.1f" | format(i.puntuacion_global) }} · R {{ "%.1f" | format(i.puntuacion_regional) }}</span>{% endif %}
+      <span>{{ i.fuente }} ({{ i.fiabilidad }})</span>
+      <span>{{ i.publicado | fecha }}</span>
+      {% if i.dominio %}<span class="etq">{{ i.dominio }}{% if i.linea and i.linea != 'otra' %} · {{ i.linea | replace('_', ' ') }}{% endif %}</span>{% endif %}
+      {% if i.cruce %}<span class="etq bien">cruce</span>{% endif %}
+      {% if i.tecnico %}<span class="etq gris">técnico</span>{% endif %}
+      {% if i.estado != 'puntuado' %}<span class="etq gris">{{ i.estado }}</span>{% endif %}
+      {% if i.paises %}<span>{{ i.paises[:4] | join(', ') }}</span>{% endif %}
+    </div>
+  </div>
+  {% else %}<p class="tenue">Nada con estos filtros.</p>{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block titulo %}Dossier {{ d.id }} · Inteligencia{% endblock %}
+{% block cabecera %}{% if esperando %}<meta http-equiv="refresh" content="8">{% endif %}{% endblock %}
+{% macro dato(h) %}
+<li>
+  <span class="etq {{ 'bien' if h.verificado else 'mal' }}">{{ '✓' if h.verificado else 'no verificado' }}</span>
+  <strong>[{{ h.id }}]</strong> {{ h.dato }}{% if h.fecha %} <span class="tenue">({{ h.fecha }})</span>{% endif %}
+  <span class="tenue">— fuente {{ h.fuente }}</span>
+  <blockquote>«{{ h.cita }}»</blockquote>
+</li>
+{% endmacro %}
+{% block contenido %}
+<p class="meta"><a href="/dossieres">← Dossieres</a><span class="etq">{{ ediciones.get(d.edicion, {}).get('nombre', d.edicion) }}</span>
+<span class="etq {{ 'bien' if d.estado == 'listo' else 'mal' if d.estado == 'error' else 'gris' }}">{{ d.estado }}</span></p>
+<h1>{{ d.tema }}</h1>
+{% if d.enfoque %}<p class="tenue">{{ d.enfoque }}</p>{% endif %}
+
+{% if esperando %}
+<div class="aviso">Reuniendo fuentes y extrayendo hechos. Suele tardar entre dos y cinco minutos; esta página se actualiza sola.</div>
+{% elif d.estado == 'error' %}
+<div class="error">{{ d.error }}</div>
+<form method="post" action="/dossier/{{ d.id }}/reintentar"><button>Reintentar</button></form>
+{% else %}
+<div class="dos">
+  <div>
+    <p class="tenue peq">{{ verificados }} de {{ total }} datos tienen su cita localizada en el texto de la fuente. Los no verificados no se usan al redactar.</p>
+    <h2>Hechos</h2>
+    <div class="tarjeta"><ul class="limpia">{% for h in d.hechos %}{{ dato(h) }}{% else %}<li class="tenue">Ninguno.</li>{% endfor %}</ul></div>
+    <h2>Contexto estructural</h2>
+    <div class="tarjeta"><ul class="limpia">{% for h in d.contexto %}{{ dato(h) }}{% else %}<li class="tenue">Ninguno.</li>{% endfor %}</ul></div>
+    <h2>Voces</h2>
+    <div class="tarjeta"><ul class="limpia">{% for v in d.voces %}
+      <li><span class="etq {{ 'bien' if v.verificado else 'mal' }}">{{ '✓' if v.verificado else 'no verificado' }}</span>
+        <strong>{{ v.quien }}</strong> <span class="tenue">({{ v.afiliacion }}) — fuente {{ v.fuente }}</span><br>{{ v.postura }}
+        <blockquote>«{{ v.cita }}»</blockquote></li>
+      {% else %}<li class="tenue">Ninguna.</li>{% endfor %}</ul></div>
+    <h2>Contraargumentos</h2>
+    <div class="tarjeta"><ul class="limpia">{% for c in d.contraargumentos %}<li>{{ c.argumento }}{% if c.fuente %} <span class="tenue">— fuente {{ c.fuente }}</span>{% else %} <span class="tenue">— inferencia</span>{% endif %}</li>{% else %}<li class="tenue">Ninguno.</li>{% endfor %}</ul></div>
+    {% if d.lagunas %}<h2>Lagunas</h2>
+    <div class="tarjeta"><ul class="limpia">{% for l in d.lagunas %}<li>{{ l }}</li>{% endfor %}</ul></div>{% endif %}
+  </div>
+  <div>
+    <h2 style="margin-top:0">Redactar</h2>
+    <div class="tarjeta">
+      <form method="post" action="/dossier/{{ d.id }}/pieza">
+        <p class="peq tenue">Elige la tesis que defenderá la pieza, o escribe la tuya.</p>
+        {% for t in d.tesis %}<p><label style="display:flex;gap:8px;color:var(--tinta);font-size:.93rem;margin:0"><input type="radio" name="tesis" value="{{ t }}" {{ 'checked' if loop.first }}> <span>{{ t }}</span></label></p>{% endfor %}
+        <label for="tp">Tesis propia</label>
+        <textarea id="tp" name="tesis_propia" rows="3"></textarea>
+        <label for="ed">Edición</label>
+        <select id="ed" name="edicion">{% for k, e in ediciones.items() %}<option value="{{ k }}" {{ 'selected' if k == d.edicion }}>{{ e.nombre }}</option>{% endfor %}</select>
+        <p style="margin-top:12px"><button>Redactar borrador</button></p>
+      </form>
+    </div>
+    {% if piezas %}<h2>Piezas de este dossier</h2>
+    <div class="tarjeta"><ul class="limpia">{% for p in piezas %}<li><a href="/pieza/{{ p.id }}">{{ p.titulo or 'Borrador en curso' }}</a> <span class="etq gris">{{ p.estado }}</span> <span class="tenue">{{ p.edicion }}</span></li>{% endfor %}</ul></div>{% endif %}
+    <h2>Fuentes ({{ fs | length }})</h2>
+    <div class="tarjeta"><ul class="limpia">{% for f in fs %}
+      <li><strong>{{ f.n }}.</strong> <a href="{{ f.url }}" target="_blank" rel="noopener noreferrer">{{ f.titulo or f.url }}</a><br>
+        <span class="tenue peq">{{ f.medio }} · {{ f.publicado | fecha }} · {{ f.origen }}{% if f.fiabilidad %} · fiabilidad {{ f.fiabilidad }}{% endif %}</span></li>
+      {% endfor %}</ul></div>
+    {% if d.consultas %}<details><summary>Búsquedas realizadas</summary><ul class="limpia">{% for c in d.consultas %}<li>{{ c.texto }}</li>{% endfor %}</ul></details>{% endif %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}

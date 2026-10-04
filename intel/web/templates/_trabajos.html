@@ -1,0 +1,17 @@
+{% if ultimos %}
+<table>
+  <tr><th>#</th><th>Tipo</th><th>Origen</th><th>Estado</th><th>Creado</th><th>Terminado</th><th>Detalle</th></tr>
+  {% for t in ultimos %}
+  <tr>
+    <td>{{ t.id }}</td><td>{{ t.tipo }}</td><td class="tenue">{{ t.origen }}</td>
+    <td><span class="etq {{ 'bien' if t.estado == 'hecho' else 'mal' if t.estado == 'error' else 'gris' }}">{{ t.estado }}</span></td>
+    <td class="tenue">{{ t.creado | hora }}</td><td class="tenue">{{ t.terminado | hora }}</td>
+    <td class="peq">
+      {% if t.error %}<span style="color:var(--mal)">{{ t.error[:220] }}</span>
+      {% elif t.tipo == 'radar' and t.resultado %}{{ t.resultado.nuevos }} nuevos · {{ t.resultado.fuentes_fallidas | length }} fuentes fallan · {{ t.resultado.puntuacion.puntuados }} puntuados · {{ t.resultado.segundos }} s
+      {% elif t.resultado %}{{ t.resultado | tojson }}{% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}<p class="tenue">Aún no hay trabajos.</p>{% endif %}

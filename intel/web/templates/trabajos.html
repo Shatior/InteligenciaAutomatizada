@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block titulo %}Trabajos · Inteligencia{% endblock %}
+{% block contenido %}
+<h1>Trabajos</h1>
+<div class="tarjeta tabla">{% set ultimos = filas %}{% include "_trabajos.html" %}</div>
+{% endblock %}

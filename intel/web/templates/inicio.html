@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block titulo %}Resumen · Inteligencia{% endblock %}
+{% block contenido %}
+<h1>Resumen</h1>
+<div class="rejilla">
+  <div class="tarjeta"><div class="cifra">{{ totales.dia }}</div><div class="tenue peq">items en 24 horas</div></div>
+  <div class="tarjeta"><div class="cifra">{{ totales.semana }}</div><div class="tenue peq">items en 7 días</div></div>
+  <div class="tarjeta"><div class="cifra">{{ totales.total }}</div><div class="tenue peq">en el archivo</div></div>
+  <div class="tarjeta"><div class="cifra">{{ totales.por_puntuar }}</div><div class="tenue peq">pendientes de puntuar</div></div>
+  <div class="tarjeta"><div class="cifra">{{ salud_fuentes.sanas }}/{{ salud_fuentes.activas }}</div><div class="tenue peq">fuentes sanas{% if salud_fuentes.fallando %} · <a href="/fuentes">{{ salud_fuentes.fallando }} fallan</a>{% endif %}</div></div>
+</div>
+
+<form class="linea" method="post" action="/radar/ejecutar">
+  {% if radar_activo %}
+    <span class="etq">Radar en curso o en cola</span>
+  {% else %}
+    <button class="sec">Ejecutar radar ahora</button>
+  {% endif %}
+  <span class="tenue peq">El radar se ejecuta solo cada pocas horas; los candidatos, una vez por semana.</span>
+</form>
+
+<h2>Últimos siete días por dominio</h2>
+<div class="tarjeta tabla">
+  {% if dominios %}
+  <table>
+    <tr><th>Dominio</th><th class="num">Items</th><th class="num">Nota media</th></tr>
+    {% for d in dominios %}
+    <tr><td><a href="/radar?dominio={{ d.dominio }}">{{ d.dominio }}</a></td><td class="num">{{ d.n }}</td><td class="num">{{ d.media }}</td></tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="tenue">Todavía no hay items puntuados.</p>{% endif %}
+</div>
+
+<h2>Últimos trabajos</h2>
+<div class="tarjeta tabla">
+  {% include "_trabajos.html" %}
+</div>
+
+<h2>Consumo de Claude este mes</h2>
+<div class="tarjeta tabla">
+  {% if uso %}
+  <table>
+    <tr><th>Modelo</th><th class="num">Llamadas</th><th class="num">Tokens de entrada</th><th class="num">Tokens de salida</th></tr>
+    {% for u in uso %}
+    <tr><td>{{ u.modelo }}</td><td class="num">{{ u.llamadas }}</td><td class="num">{{ "{:,}".format(u.entrada).replace(",", ".") }}</td><td class="num">{{ "{:,}".format(u.salida).replace(",", ".") }}</td></tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="tenue">Sin llamadas este mes.</p>{% endif %}
+</div>
+{% endblock %}
