@@ -22,23 +22,39 @@ def _fecha_iso(valor: str | None) -> datetime | None:
 
 
 def _marcar_duplicados() -> int:
-    """Marca como duplicado todo item cuyo titular ya entró antes por otra fuente en la última semana.
+    """Deja un solo item vivo por titular entre los de la última semana.
 
-    Se hace en una sola sentencia tras la recolección: comprobarlo al insertar daría carreras
-    entre los hilos que leen fuentes distintas a la vez.
+    Se hace en sentencias propias tras la recolección: comprobarlo al insertar daría carreras
+    entre los hilos que leen fuentes distintas a la vez. Gana el más antiguo, salvo que no
+    tenga texto y otro sí: entonces cede el que se quedó sin texto.
     """
-    return db.ex(
+    n = db.ex(
         """
         UPDATE items i SET estado = 'duplicado'
         WHERE i.estado IN ('nuevo', 'con_texto', 'sin_texto') AND i.titulo_hash IS NOT NULL
           AND i.recolectado > now() - interval '2 days'
           AND EXISTS (
               SELECT 1 FROM items j
-              WHERE j.titulo_hash = i.titulo_hash AND j.id < i.id AND j.estado <> 'duplicado'
+              WHERE j.titulo_hash = i.titulo_hash AND j.id < i.id
+                AND j.estado NOT IN ('duplicado', 'sin_texto', 'antiguo')
                 AND j.recolectado > i.recolectado - interval '7 days'
           )
         """
     )
+    n += db.ex(
+        """
+        UPDATE items i SET estado = 'duplicado'
+        WHERE i.estado = 'sin_texto' AND i.titulo_hash IS NOT NULL
+          AND i.recolectado > now() - interval '7 days'
+          AND EXISTS (
+              SELECT 1 FROM items j
+              WHERE j.titulo_hash = i.titulo_hash AND j.id <> i.id
+                AND j.estado IN ('con_texto', 'puntuado')
+                AND j.recolectado > i.recolectado - interval '7 days'
+          )
+        """
+    )
+    return n
 
 
 def _recolectar_fuente(f: dict) -> dict:
@@ -197,6 +213,15 @@ def pasada() -> dict:
         """
     ):
         log.info("SIN TEXTO    %-28s %3d  %s", f["fuente_id"], f["n"], (f["ejemplo"] or "")[:120])
+
+    metodos = db.q(
+        """
+        SELECT coalesce(texto_metodo, 'sin texto') AS metodo, count(*) AS n
+        FROM items WHERE recolectado > now() - interval '1 day' AND estado NOT IN ('duplicado', 'antiguo')
+        GROUP BY 1 ORDER BY n DESC
+        """
+    )
+    log.info("Textos por vía (24 h): %s", ", ".join(f"{m['metodo']}={m['n']}" for m in metodos))
 
     puntuacion = puntuar.puntuar_pendientes()
 

@@ -203,6 +203,17 @@ def main() -> None:
     r2 = radar.pasada()
     assert r2["nuevos"] == 0, r2
 
+    # 2b. Si el primero de dos titulares iguales se quedó sin texto, el duplicado es él
+    db.ex(
+        "INSERT INTO items (fuente_id, url, url_hash, titulo, titulo_hash, estado) "
+        "VALUES ('uno', 'http://x/a', 'ha', 'Titular repetido de prueba para ceder', 'th-ceder', 'sin_texto'), "
+        "('dos', 'http://x/b', 'hb', 'Titular repetido de prueba para ceder', 'th-ceder', 'con_texto')"
+    )
+    radar._marcar_duplicados()
+    par = {x["url"]: x["estado"] for x in db.q("SELECT url, estado FROM items WHERE titulo_hash = 'th-ceder'")}
+    assert par == {"http://x/a": "duplicado", "http://x/b": "con_texto"}, par
+    db.ex("DELETE FROM items WHERE titulo_hash = 'th-ceder'")
+
     # 3. Con Claude simulado: puntuación, candidatos, dossier, pieza
     _simular_claude()
     from intel import puntuar
