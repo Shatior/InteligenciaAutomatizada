@@ -51,9 +51,13 @@ def recolectar(fuente: dict) -> list[dict]:
         detalle = getattr(feed, "bozo_exception", None)
         raise RuntimeError(f"feed sin entradas ({detalle})" if detalle else "feed sin entradas")
 
+    # Algunos feeds enlazan a una vista intermedia y no al artículo: el registro puede corregir la URL.
+    sustituir = (fuente.get("config") or {}).get("sustituir_url")
     items = []
     for e in feed.entries:
         enlace = (e.get("link") or "").strip()
+        if sustituir:
+            enlace = enlace.replace(sustituir[0], sustituir[1])
         titulo = sin_html(e.get("title"))
         if not enlace.startswith("http") or not titulo:
             continue

@@ -9,6 +9,7 @@
 #   fiabilidad  escala Admiralty: A oficial o primaria · B establecida · C desigual o con línea marcada
 #   solo_feed   true = no se trae el artículo (muro de pago): se trabaja con titular y resumen
 #   navegador   true = si falla la petición simple, se reintenta con Chromium
+#   sustituir_url  [de, a] = corrige el enlace del feed cuando apunta a una vista intermedia
 #   sigilo      true = además se permite el navegador sigiloso que resuelve Cloudflare.
 #               Es una decisión por fuente: actívalo solo donde lo hayas valorado.
 #   activa      false = se conserva en el registro pero no se lee
@@ -23,7 +24,7 @@ fuentes:
   - {id: dw-es, nombre: DW Español, url: "https://rss.dw.com/rdf/rss-sp-all", dominio: geopolitica, region: global, idioma: es, tipo: prensa, fiabilidad: B}
   - {id: france24-es, nombre: France 24 Español, url: "https://www.france24.com/es/rss", dominio: geopolitica, region: global, idioma: es, tipo: prensa, fiabilidad: B}
   - {id: elpais-internacional, nombre: El País Internacional, url: "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/internacional/portada", dominio: geopolitica, region: global, idioma: es, tipo: prensa, fiabilidad: B, solo_feed: true}
-  - {id: onu-noticias, nombre: Noticias ONU, url: "https://news.un.org/feed/subscribe/es/news/all/rss.xml", dominio: geopolitica, region: global, idioma: es, tipo: oficial, fiabilidad: A, navegador: true}
+  - {id: onu-noticias, nombre: Noticias ONU, url: "https://news.un.org/feed/subscribe/es/news/all/rss.xml", dominio: geopolitica, region: global, idioma: es, tipo: oficial, fiabilidad: A, sustituir_url: ["/feed/view/", "/"]}
   - {id: foreign-policy, nombre: Foreign Policy, url: "https://foreignpolicy.com/feed/", dominio: geopolitica, region: global, idioma: en, tipo: especializado, fiabilidad: B, solo_feed: true}
   - {id: foreign-affairs, nombre: Foreign Affairs, url: "https://www.foreignaffairs.com/rss.xml", dominio: geopolitica, region: global, idioma: en, tipo: especializado, fiabilidad: B, solo_feed: true}
   - {id: war-on-the-rocks, nombre: War on the Rocks, url: "https://warontherocks.com/feed/", dominio: geopolitica, region: global, idioma: en, tipo: especializado, fiabilidad: B}

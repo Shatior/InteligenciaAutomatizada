@@ -140,12 +140,15 @@ def _html_navegador(url: str, sigilo: bool) -> tuple[int, str]:
             if sigilo:
                 from scrapling.fetchers import StealthyFetcher
 
-                r = StealthyFetcher.fetch(url, headless=True, solve_cloudflare=True, timeout=60000, block_ads=True)
+                r = StealthyFetcher.fetch(
+                    url, headless=True, solve_cloudflare=True, timeout=60000, block_ads=True, retries=1
+                )
             else:
                 from scrapling.fetchers import DynamicFetcher
 
                 r = DynamicFetcher.fetch(
-                    url, headless=True, network_idle=True, disable_resources=True, timeout=45000, block_ads=True
+                    url, headless=True, network_idle=True, disable_resources=True, timeout=30000, block_ads=True,
+                    retries=1,
                 )
             return r.status, _html_de(r)
         except Exception as e:  # noqa: BLE001
