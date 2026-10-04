@@ -138,6 +138,9 @@ def motor() -> None:
     db.migrar()
     _recuperar_interrumpidos()
     threading.Thread(target=_probar_navegador, daemon=True).start()
+    if config.RADAR_AL_ARRANCAR and not hay_activo("radar"):
+        encolar("radar", origen="arranque")
+        log.info("Radar encolado por RADAR_AL_ARRANCAR")
     log.info(
         "Motor en marcha. Radar cada %dh. Claude: %s. Exa: %s. Navegador: %s",
         config.RADAR_CADA_HORAS,

@@ -172,6 +172,16 @@ def pasada() -> dict:
     duplicados += _marcar_duplicados()  # las fuentes sin feed reciben su titular al traer el artículo
     log.info("Textos: %s; duplicados: %d", conteo, duplicados)
 
+    for f in db.q(
+        """
+        SELECT fuente_id, count(*) AS n, min(texto_error) AS ejemplo
+        FROM items WHERE estado = 'sin_texto' AND texto_error <> 'solo_feed'
+          AND recolectado > now() - interval '1 day'
+        GROUP BY fuente_id ORDER BY n DESC LIMIT 15
+        """
+    ):
+        log.info("SIN TEXTO    %-28s %3d  %s", f["fuente_id"], f["n"], (f["ejemplo"] or "")[:120])
+
     puntuacion = puntuar.puntuar_pendientes()
 
     resumen = {

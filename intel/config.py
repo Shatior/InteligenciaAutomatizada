@@ -33,13 +33,14 @@ MODELO_REDACCION = _env("MODELO_REDACCION", "claude-sonnet-5-5")
 
 # Programación del motor
 RADAR_CADA_HORAS = _int("RADAR_CADA_HORAS", 6)
+RADAR_AL_ARRANCAR = _env("RADAR_AL_ARRANCAR", "0") == "1"  # útil tras cambiar el registro de fuentes
 CANDIDATOS_DIA = _int("CANDIDATOS_DIA", 3)  # lunes=0 ... jueves=3
 CANDIDATOS_HORA_UTC = _int("CANDIDATOS_HORA_UTC", 12)  # 12:00 UTC = 06:00 en Tegucigalpa
 
 # Recolección
 DIAS_VENTANA = _int("DIAS_VENTANA", 10)  # se ignoran entradas más antiguas
 MAX_ITEMS_POR_FUENTE = _int("MAX_ITEMS_POR_FUENTE", 30)
-MAX_TEXTOS_POR_PASADA = _int("MAX_TEXTOS_POR_PASADA", 500)
+MAX_TEXTOS_POR_PASADA = _int("MAX_TEXTOS_POR_PASADA", 1500)
 MAX_PUNTUAR_POR_PASADA = _int("MAX_PUNTUAR_POR_PASADA", 600)
 HILOS = _int("HILOS", 8)
 

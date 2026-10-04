@@ -32,33 +32,33 @@ fuentes:
   - {id: responsible-statecraft, nombre: Responsible Statecraft, url: "https://responsiblestatecraft.org/feed/", dominio: geopolitica, region: global, idioma: en, tipo: think_tank, fiabilidad: C}
   - {id: crisis-group, nombre: International Crisis Group, url: "https://www.crisisgroup.org/rss", dominio: geopolitica, region: global, idioma: en, tipo: think_tank, fiabilidad: B}
   - {id: csis, nombre: CSIS, url: "https://www.csis.org/rss.xml", dominio: geopolitica, region: global, idioma: en, tipo: think_tank, fiabilidad: B}
-  - {id: brookings, nombre: Brookings, url: "https://www.brookings.edu/feed/", dominio: geopolitica, region: global, idioma: en, tipo: think_tank, fiabilidad: B}
+  - {id: brookings, nombre: Brookings, url: "https://www.brookings.edu/articles/", metodo: html, patron: "^/articles/[a-z0-9-]+/?$", dominio: geopolitica, region: global, idioma: en, tipo: think_tank, fiabilidad: B}
   - {id: atlantic-council, nombre: Atlantic Council, url: "https://www.atlanticcouncil.org/feed/", dominio: geopolitica, region: global, idioma: en, tipo: think_tank, fiabilidad: B}
-  - {id: chatham-house, nombre: Chatham House, url: "https://www.chathamhouse.org/rss.xml", dominio: geopolitica, region: global, idioma: en, tipo: think_tank, fiabilidad: B}
+  - {id: chatham-house, nombre: Chatham House, url: "https://www.chathamhouse.org/publications", metodo: html, patron: "^/\\d{4}/\\d{2}/[a-z0-9-]+", navegador: true, dominio: geopolitica, region: global, idioma: en, tipo: think_tank, fiabilidad: B}
   - {id: elcano, nombre: Real Instituto Elcano, url: "https://www.realinstitutoelcano.org/feed/", dominio: geopolitica, region: global, idioma: es, tipo: think_tank, fiabilidad: B}
-  - {id: ecfr, nombre: ECFR, url: "https://ecfr.eu/feed/", dominio: geopolitica, region: global, idioma: en, tipo: think_tank, fiabilidad: B}
+  - {id: ecfr, nombre: ECFR, url: "https://ecfr.eu/publications/", metodo: html, patron: "^/(article|publication)/[a-z0-9-]+", navegador: true, dominio: geopolitica, region: global, idioma: en, tipo: think_tank, fiabilidad: B}
   - {id: lowy-interpreter, nombre: Lowy Institute – The Interpreter, url: "https://www.lowyinstitute.org/the-interpreter/rss.xml", dominio: geopolitica, region: global, idioma: en, tipo: think_tank, fiabilidad: B}
   - {id: stimson, nombre: Stimson Center, url: "https://www.stimson.org/feed/", dominio: geopolitica, region: global, idioma: en, tipo: think_tank, fiabilidad: B}
-  - {id: cfr, nombre: Council on Foreign Relations, url: "https://www.cfr.org/rss.xml", dominio: geopolitica, region: global, idioma: en, tipo: think_tank, fiabilidad: B}
+  - {id: cfr, nombre: Council on Foreign Relations, url: "https://www.cfr.org/articles", metodo: html, patron: "^/(article|articles|expert-brief|in-brief|backgrounder|blog)/[a-z0-9-]+", dominio: geopolitica, region: global, idioma: en, tipo: think_tank, fiabilidad: B}
 
   # ───────────── Macro y organismos ─────────────
-  - {id: fmi-blog, nombre: FMI – Blog, url: "https://www.imf.org/en/Blogs/rss", dominio: macro, region: global, idioma: en, tipo: oficial, fiabilidad: A}
-  - {id: fmi-noticias, nombre: FMI – Noticias, url: "https://www.imf.org/en/News/RSS", dominio: macro, region: global, idioma: en, tipo: oficial, fiabilidad: A}
+  - {id: fmi-blog, nombre: FMI – Blog, url: "https://www.imf.org/en/Blogs", metodo: html, patron: "^/en/Blogs/Articles/\\d{4}/", navegador: true, dominio: macro, region: global, idioma: en, tipo: oficial, fiabilidad: A}
+  - {id: fmi-noticias, nombre: FMI – Noticias, url: "https://www.imf.org/en/News", metodo: html, patron: "^/en/News/Articles/\\d{4}/", navegador: true, dominio: macro, region: global, idioma: en, tipo: oficial, fiabilidad: A}
   - {id: bis-prensa, nombre: BIS – Comunicados, url: "https://www.bis.org/doclist/all_pressrels.rss", dominio: macro, region: global, idioma: en, tipo: oficial, fiabilidad: A}
   - {id: bis-discursos, nombre: BIS – Discursos de bancos centrales, url: "https://www.bis.org/doclist/cbspeeches.rss", dominio: macro, region: global, idioma: en, tipo: oficial, fiabilidad: A}
   - {id: fed-prensa, nombre: Reserva Federal – Comunicados, url: "https://www.federalreserve.gov/feeds/press_all.xml", dominio: macro, region: global, idioma: en, tipo: oficial, fiabilidad: A}
   - {id: bce-prensa, nombre: BCE – Comunicados, url: "https://www.ecb.europa.eu/rss/press.html", dominio: macro, region: global, idioma: en, tipo: oficial, fiabilidad: A}
-  - {id: banco-mundial-blogs, nombre: Banco Mundial – Blogs, url: "https://blogs.worldbank.org/en/rss.xml", dominio: macro, region: global, idioma: en, tipo: oficial, fiabilidad: A}
-  - {id: cepal, nombre: CEPAL – Noticias, url: "https://www.cepal.org/es/rss.xml", dominio: macro, region: latam, idioma: es, tipo: oficial, fiabilidad: A}
-  - {id: bid-ideas, nombre: BID – Ideas que cuentan, url: "https://blogs.iadb.org/ideas-que-cuentan/es/feed/", dominio: macro, region: latam, idioma: es, tipo: oficial, fiabilidad: A}
+  - {id: banco-mundial-blogs, nombre: Banco Mundial – Blogs, url: "https://blogs.worldbank.org/en/rss.xml", dominio: macro, region: global, idioma: en, tipo: oficial, fiabilidad: A, activa: false, nota: "el feed publicado ya no existe (404)"}
+  - {id: cepal, nombre: CEPAL – Comunicados, url: "https://www.cepal.org/es/comunicados", metodo: html, patron: "^/es/(comunicados|noticias)/[a-z0-9-]+", dominio: macro, region: latam, idioma: es, tipo: oficial, fiabilidad: A}
+  - {id: bid-ideas, nombre: BID – Ideas que cuentan, url: "https://blogs.iadb.org/ideas-que-cuentan/es/feed/", dominio: macro, region: latam, idioma: es, tipo: oficial, fiabilidad: A, activa: false, nota: "el blog se mudó a iadb.org/es/blog-del-bid, sin feed"}
 
   # ───────────── Latinoamérica ─────────────
   - {id: elpais-america, nombre: El País América, url: "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/america/portada", dominio: geopolitica, region: latam, idioma: es, tipo: prensa, fiabilidad: B, solo_feed: true}
-  - {id: americas-quarterly, nombre: Americas Quarterly, url: "https://www.americasquarterly.org/feed/", dominio: geopolitica, region: latam, idioma: en, tipo: especializado, fiabilidad: B}
+  - {id: americas-quarterly, nombre: Americas Quarterly, url: "https://www.americasquarterly.org/", metodo: html, patron: "^/article/[a-z0-9-]+", navegador: true, dominio: geopolitica, region: latam, idioma: en, tipo: especializado, fiabilidad: B}
   - {id: insight-crime, nombre: InSight Crime, url: "https://insightcrime.org/feed/", dominio: geopolitica, region: latam, idioma: en, tipo: especializado, fiabilidad: B}
   - {id: dialogo-interamericano, nombre: Diálogo Interamericano, url: "https://www.thedialogue.org/feed/", dominio: geopolitica, region: latam, idioma: en, tipo: think_tank, fiabilidad: B}
-  - {id: wola, nombre: WOLA, url: "https://www.wola.org/feed/", dominio: geopolitica, region: latam, idioma: en, tipo: think_tank, fiabilidad: B}
-  - {id: global-americans, nombre: Global Americans, url: "https://theglobalamericans.org/feed/", dominio: geopolitica, region: latam, idioma: en, tipo: think_tank, fiabilidad: B}
+  - {id: wola, nombre: WOLA, url: "https://www.wola.org/analysis/", metodo: html, patron: "^/analysis/[a-z0-9-]+", navegador: true, dominio: geopolitica, region: latam, idioma: en, tipo: think_tank, fiabilidad: B}
+  - {id: global-americans, nombre: Global Americans, url: "https://theglobalamericans.org/feed/", dominio: geopolitica, region: latam, idioma: en, tipo: think_tank, fiabilidad: B, activa: false, nota: "certificado TLS del sitio no válido"}
   - {id: bloomberg-linea, nombre: Bloomberg Línea, url: "https://www.bloomberglinea.com/arc/outboundfeeds/rss/?outputType=xml", dominio: macro, region: latam, idioma: es, tipo: prensa, fiabilidad: B}
   - {id: rest-of-world, nombre: Rest of World, url: "https://restofworld.org/feed/latest/", dominio: transformacion, region: global, idioma: en, tipo: especializado, fiabilidad: B}
 
@@ -70,15 +70,15 @@ fuentes:
   - {id: proceso-digital, nombre: Proceso Digital (Honduras), url: "https://proceso.hn/feed/", dominio: geopolitica, region: centroamerica, idioma: es, tipo: prensa, fiabilidad: C}
   - {id: hondudiario, nombre: Hondudiario, url: "https://hondudiario.com/feed/", dominio: geopolitica, region: centroamerica, idioma: es, tipo: prensa, fiabilidad: C}
   - {id: expediente-publico, nombre: Expediente Público, url: "https://www.expedientepublico.org/feed/", dominio: geopolitica, region: centroamerica, idioma: es, tipo: prensa, fiabilidad: B}
-  - {id: elfaro, nombre: El Faro, url: "https://elfaro.net/es/rss", dominio: geopolitica, region: centroamerica, idioma: es, tipo: prensa, fiabilidad: B}
-  - {id: elsalvador-com, nombre: El Diario de Hoy, url: "https://www.elsalvador.com/feed/", dominio: geopolitica, region: centroamerica, idioma: es, tipo: prensa, fiabilidad: C}
+  - {id: elfaro, nombre: El Faro, url: "https://elfaro.net/es", metodo: html, patron: "^/es/\\d{6}/[a-z_]+/\\d+/", dominio: geopolitica, region: centroamerica, idioma: es, tipo: prensa, fiabilidad: B}
+  - {id: elsalvador-com, nombre: El Diario de Hoy, url: "https://www.elsalvador.com/feed/", dominio: geopolitica, region: centroamerica, idioma: es, tipo: prensa, fiabilidad: C, activa: false, nota: "el servidor rechaza lectores automáticos (403)"}
   - {id: prensa-libre, nombre: Prensa Libre (Guatemala), url: "https://www.prensalibre.com/feed/", dominio: geopolitica, region: centroamerica, idioma: es, tipo: prensa, fiabilidad: B}
   - {id: no-ficcion, nombre: No-Ficción (Guatemala), url: "https://no-ficcion.com/feed/", dominio: geopolitica, region: centroamerica, idioma: es, tipo: prensa, fiabilidad: B}
   - {id: nacion-cr, nombre: La Nación (Costa Rica), url: "https://www.nacion.com/arc/outboundfeeds/rss/?outputType=xml", dominio: geopolitica, region: centroamerica, idioma: es, tipo: prensa, fiabilidad: B}
   - {id: elfinanciero-cr, nombre: El Financiero (Costa Rica), url: "https://www.elfinancierocr.com/arc/outboundfeeds/rss/?outputType=xml", dominio: macro, region: centroamerica, idioma: es, tipo: prensa, fiabilidad: B}
   - {id: prensa-pa, nombre: La Prensa (Panamá), url: "https://www.prensa.com/arc/outboundfeeds/rss/?outputType=xml", dominio: geopolitica, region: centroamerica, idioma: es, tipo: prensa, fiabilidad: B}
   - {id: summa, nombre: Revista Summa, url: "https://revistasumma.com/feed/", dominio: macro, region: centroamerica, idioma: es, tipo: prensa, fiabilidad: C}
-  - {id: forbes-ca, nombre: Forbes Centroamérica, url: "https://forbescentroamerica.com/feed/", dominio: macro, region: centroamerica, idioma: es, tipo: prensa, fiabilidad: C}
+  - {id: forbes-ca, nombre: Forbes Centroamérica, url: "https://forbescentroamerica.com/feed/", dominio: macro, region: centroamerica, idioma: es, tipo: prensa, fiabilidad: C, activa: false, nota: "el feed exige autenticación (401)"}
   - {id: secmca, nombre: SECMCA – Noticias, url: "https://www.secmca.org/feed/", dominio: macro, region: centroamerica, idioma: es, tipo: oficial, fiabilidad: A}
   - {id: cnbs, nombre: CNBS (Honduras), url: "https://www.cnbs.gob.hn/feed/", dominio: macro, region: centroamerica, idioma: es, tipo: oficial, fiabilidad: A}
   - {id: elheraldo-hn, nombre: El Heraldo (Honduras), url: "https://www.elheraldo.hn/economia", metodo: html, patron: "^/economia/.+-[A-Z]{2}\\d+", dominio: macro, region: centroamerica, idioma: es, tipo: prensa, fiabilidad: C}
@@ -100,13 +100,13 @@ fuentes:
   - {id: cisa-noticias, nombre: CISA – Noticias, url: "https://www.cisa.gov/news.xml", dominio: ciber, region: global, idioma: en, tipo: oficial, fiabilidad: A}
   - {id: ncsc-uk, nombre: NCSC (Reino Unido), url: "https://www.ncsc.gov.uk/api/1/services/v1/all-rss-feed.xml", dominio: ciber, region: global, idioma: en, tipo: oficial, fiabilidad: A}
   - {id: incibe-avisos, nombre: INCIBE-CERT – Avisos, url: "https://www.incibe.es/incibe-cert/alerta-temprana/avisos/feed", dominio: ciber, region: global, idioma: es, tipo: oficial, fiabilidad: A}
-  - {id: enisa, nombre: ENISA, url: "https://www.enisa.europa.eu/rss.xml", dominio: ciber, region: global, idioma: en, tipo: oficial, fiabilidad: A}
+  - {id: enisa, nombre: ENISA, url: "https://www.enisa.europa.eu/news", metodo: html, patron: "^/news/[a-z0-9-]+", dominio: ciber, region: global, idioma: en, tipo: oficial, fiabilidad: A}
   - {id: microsoft-seguridad, nombre: Microsoft Security Blog, url: "https://www.microsoft.com/en-us/security/blog/feed/", dominio: ciber, region: global, idioma: en, tipo: especializado, fiabilidad: B}
   - {id: schneier, nombre: Schneier on Security, url: "https://www.schneier.com/feed/atom/", dominio: ciber, region: global, idioma: en, tipo: especializado, fiabilidad: B}
 
   # ───────────── Transformación digital financiera ─────────────
   - {id: finextra, nombre: Finextra, url: "https://www.finextra.com/rss/headlines.aspx", dominio: transformacion, region: global, idioma: en, tipo: especializado, fiabilidad: B}
-  - {id: fintech-futures, nombre: Fintech Futures, url: "https://www.fintechfutures.com/feed/", dominio: transformacion, region: global, idioma: en, tipo: especializado, fiabilidad: B}
+  - {id: fintech-futures, nombre: Fintech Futures, url: "https://www.fintechfutures.com/feed/", dominio: transformacion, region: global, idioma: en, tipo: especializado, fiabilidad: B, activa: false, nota: "el servidor rechaza lectores automáticos (403)"}
   - {id: pymnts, nombre: PYMNTS, url: "https://www.pymnts.com/feed/", dominio: transformacion, region: global, idioma: en, tipo: especializado, fiabilidad: C}
   - {id: tearsheet, nombre: Tearsheet, url: "https://tearsheet.co/feed/", dominio: transformacion, region: global, idioma: en, tipo: especializado, fiabilidad: B}
   - {id: finovate, nombre: Finovate, url: "https://finovate.com/feed/", dominio: transformacion, region: global, idioma: en, tipo: especializado, fiabilidad: C}
@@ -116,7 +116,7 @@ fuentes:
   - {id: the-block, nombre: The Block, url: "https://www.theblock.co/rss.xml", dominio: transformacion, region: global, idioma: en, tipo: especializado, fiabilidad: C}
   - {id: iupana, nombre: iupana, url: "https://iupana.com/feed/", dominio: transformacion, region: latam, idioma: es, tipo: especializado, fiabilidad: B}
   - {id: contxto, nombre: Contxto, url: "https://contxto.com/en/feed/", dominio: transformacion, region: latam, idioma: en, tipo: especializado, fiabilidad: C}
-  - {id: bid-innovacion, nombre: BID – Puntos sobre la i, url: "https://blogs.iadb.org/innovacion/es/feed/", dominio: transformacion, region: latam, idioma: es, tipo: oficial, fiabilidad: A}
-  - {id: bis-fsi, nombre: BIS – Financial Stability Institute, url: "https://www.bis.org/doclist/fsi_publs.rss", dominio: transformacion, region: global, idioma: en, tipo: oficial, fiabilidad: A}
+  - {id: bid-innovacion, nombre: BID – Puntos sobre la i, url: "https://blogs.iadb.org/innovacion/es/feed/", dominio: transformacion, region: latam, idioma: es, tipo: oficial, fiabilidad: A, activa: false, nota: "el blog se mudó a iadb.org/es/blog-del-bid, sin feed"}
+  - {id: bis-fsi, nombre: BIS – Publicaciones de investigación, url: "https://www.bis.org/doclist/bis_fsi_publs.rss", dominio: transformacion, region: global, idioma: en, tipo: oficial, fiabilidad: A}
   - {id: bis-trabajos, nombre: BIS – Working Papers, url: "https://www.bis.org/doclist/wppubls.rss", dominio: transformacion, region: global, idioma: en, tipo: oficial, fiabilidad: A}
   - {id: mckinsey, nombre: McKinsey Insights, url: "https://www.mckinsey.com/insights/rss", dominio: transformacion, region: global, idioma: en, tipo: especializado, fiabilidad: B}

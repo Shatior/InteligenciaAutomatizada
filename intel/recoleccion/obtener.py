@@ -19,6 +19,19 @@ from .. import config
 
 log = logging.getLogger("intel.obtener")
 
+
+def _silenciar_scrapling() -> None:
+    """Scrapling instala su propio registro a nivel INFO al importarse: una línea por petición."""
+    import importlib
+
+    importlib.import_module("scrapling")
+    registro = logging.getLogger("scrapling")
+    registro.setLevel(logging.WARNING)
+    registro.propagate = False
+
+
+_silenciar_scrapling()
+
 _BLOQUEO = {401, 403, 406, 429, 503}
 _MARCAS_BLOQUEO = ("just a moment", "cf-chl", "enable javascript", "attention required", "captcha", "access denied")
 _MIN_TEXTO = 500

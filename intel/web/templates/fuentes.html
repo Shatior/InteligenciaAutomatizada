@@ -8,7 +8,7 @@
     <tr><th>Fuente</th><th>Dominio</th><th>Región</th><th>Fiab.</th><th>Método</th><th>Estado</th><th class="num">Última</th><th class="num">Total</th><th>Último acierto</th></tr>
     {% for f in filas %}
     <tr>
-      <td><a href="{{ f.url }}" target="_blank" rel="noopener noreferrer">{{ f.nombre }}</a>{% if f.ultimo_error %}<br><span class="peq" style="color:var(--mal)">{{ f.ultimo_error[:160] }}</span>{% endif %}</td>
+      <td><a href="{{ f.url }}" target="_blank" rel="noopener noreferrer">{{ f.nombre }}</a>{% if not f.activa and f.config.get('nota') %}<br><span class="peq tenue">Apagada: {{ f.config.get('nota') }}</span>{% elif f.ultimo_error %}<br><span class="peq" style="color:var(--mal)">{{ f.ultimo_error[:160] }}</span>{% endif %}</td>
       <td class="tenue">{{ f.dominio }}</td><td class="tenue">{{ f.region }}</td><td>{{ f.fiabilidad }}</td>
       <td class="tenue">{{ f.metodo }}{% if f.config.get('sigilo') %} · sigilo{% elif f.config.get('navegador') %} · navegador{% endif %}{% if f.config.get('solo_feed') %} · solo feed{% endif %}</td>
       <td>{% if not f.activa %}<span class="etq gris">inactiva</span>{% elif f.fallos_consecutivos %}<span class="etq mal">falla ×{{ f.fallos_consecutivos }}</span>{% elif f.ultimo_ok %}<span class="etq bien">sana</span>{% else %}<span class="etq gris">sin probar</span>{% endif %}</td>
